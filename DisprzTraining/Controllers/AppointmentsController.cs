@@ -57,11 +57,11 @@ namespace DisprzTraining.Controllers
             return Ok(_appointmentsBL.GetAppointmentsForSelectedDate(date));
         }
 
-        [HttpGet("range/{date}")]
+        [HttpGet("range/{startDate}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        public ActionResult<List<Appointment>> GetListByRange(DateTime date)
+        public ActionResult<List<Appointment>> GetListByRange(DateTime startDate)
         {
-            return Ok(_appointmentsBL.GetRangedList(date));
+            return Ok(_appointmentsBL.GetRangedList(startDate));
         }
 
         [HttpDelete("{id}/{date}")]
@@ -70,7 +70,7 @@ namespace DisprzTraining.Controllers
 
         public IActionResult Remove(Guid id, DateTime date)
         {
-            bool idIsThere = _appointmentsBL.RemoveAppointments(id, date);
+            bool idIsThere = _appointmentsBL.RemoveAppointment(id, date);
             if (idIsThere == true)
             {
                 return NoContent();
@@ -89,7 +89,7 @@ namespace DisprzTraining.Controllers
         {
             try
             {
-                bool eventIsUpdated = _appointmentsBL.UpdateAppointments(data);
+                bool eventIsUpdated = _appointmentsBL.UpdateAppointment(data);
                 if (eventIsUpdated == true)
                 {
                     return Ok(eventIsUpdated);
@@ -98,6 +98,10 @@ namespace DisprzTraining.Controllers
                 {
                     return Conflict(JsonConvert.SerializeObject(CustomErrorCodeMessages.meetingIsAlreadyAssigned));
                 }
+            }
+            catch (ArgumentException e)
+            {
+                return NotFound(e.Message);
             }
             catch (Exception e)
             {

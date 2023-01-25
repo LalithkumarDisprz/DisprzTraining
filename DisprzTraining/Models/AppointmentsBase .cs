@@ -15,5 +15,7 @@ namespace DisprzTraining.Models
         public DateTime StartTime { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please select end-time")]
         public DateTime EndTime { get; set; }
+       
+       public Attachment? AppointmentAttachment { get; set; }
     }
 }

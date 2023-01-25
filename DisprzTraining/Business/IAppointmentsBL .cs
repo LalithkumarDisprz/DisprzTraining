@@ -9,8 +9,8 @@ namespace DisprzTraining.Business
         List<Appointment> GetAppointmentsForSelectedDate(DateTime date);
 
         List<Appointment> GetRangedList(DateTime date);
-        bool RemoveAppointments(Guid id, DateTime date);
+        bool RemoveAppointment(Guid id, DateTime date);
 
-        bool UpdateAppointments(UpdateAppointment data);
+        bool UpdateAppointment(UpdateAppointment data);
     }
 }

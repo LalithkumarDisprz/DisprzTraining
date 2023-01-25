@@ -39,6 +39,12 @@ namespace DisprzTraining.CustomErrorCodes
             message = "Invalid Date or id",
             errorCode = "INVALID_DATE_ID",
         };
+        
+        public static CustomCodes invalidAttachment = new CustomCodes()
+        {
+            message = "Invalid Content as Attachment",
+            errorCode = "INVALID_ATTACHMENT",
+        };
         public static CustomCodes invalidInputs = new CustomCodes()
         {
             message = "Unable to process the data check your inputs",

@@ -1,8 +1,5 @@
 
-using DisprzTraining.Data;
-using DisprzTraining.Models.CustomCodeModel;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 
 namespace DisprzTraining.Tests
 {
@@ -25,6 +22,12 @@ namespace DisprzTraining.Tests
             Type = "Reminder",
             StartTime = DateTime.Now.AddMinutes(30),
             EndTime = DateTime.Now.AddHours(1),
+            AppointmentAttachment = new Attachment()
+            {
+                Content = "",
+                ContentName = "",
+                ContentType = "",
+            }
         };
         private List<Appointment> GetTestData(ActionResult<List<Appointment>> getResult)
         {
@@ -34,26 +37,66 @@ namespace DisprzTraining.Tests
         [Fact]
         public void Create_Appointment_Returns_Status_Created()
         {
-
+            //Arrange
+            AddNewAppointment data_2 = new AddNewAppointment()
+            {
+                Date = testData.Date,
+                Title = "test",
+                Description = "test-case",
+                Type = "Reminder",
+                StartTime = DateTime.Now.AddHours(2),
+                EndTime = DateTime.Now.AddHours(3),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = MockDatas.base64,
+                    ContentName = "Calendar",
+                    ContentType = "image",
+                }
+            };
+            AddNewAppointment data_3 = new AddNewAppointment()
+            {
+                Date = testData.Date,
+                Title = "test",
+                Description = "test-case",
+                Type = "Reminder",
+                StartTime = DateTime.Now.AddHours(6),
+                EndTime = DateTime.Now.AddHours(7),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = MockDatas.mockBase64,
+                    ContentName = "Calendar",
+                    ContentType = "image",
+                }
+            };
             //Act
             var result = _appointment.CreateAppointment(testData);
+            var result_2 = _appointment.CreateAppointment(data_2);
+            var result_3 = _appointment.CreateAppointment(data_3);
             var postResult = result as CreatedResult;
+            var postResult_2 = result_2 as CreatedResult;
+            var postResult_3 = result_3 as CreatedResult;
             var getResult = _appointment.GetAppointmentsByDate(testData.Date);
-            var resData = GetTestData(getResult);
+            var resultData = GetTestData(getResult);
             var res = getResult.Result as OkObjectResult;
-            var testId = resData[0].Id;
+            var testId = resultData[0].Id;
 
             //Assert
-            Assert.Equal("test", resData[0].Title);
-            Assert.Equal(testData.StartTime, resData[0].StartTime);
-            Assert.Equal(testData.EndTime, resData[0].EndTime);
-            Assert.Equal("Reminder", resData[0].Type);
+            Assert.Equal("test", resultData[0].Title);
+            Assert.Equal(testData.StartTime, resultData[0].StartTime);
+            Assert.Equal(testData.EndTime, resultData[0].EndTime);
+            Assert.Equal("Reminder", resultData[0].Type);
             Assert.Equal(201, postResult?.StatusCode);
-            Assert.True(postResult?.Value?.Equals(true));
+            Assert.Equal(201, postResult_2?.StatusCode);
+            Assert.Equal(201, postResult_2?.StatusCode);
             Assert.Equal(200, res?.StatusCode);
-            Assert.IsType<List<Appointment>>(resData);
+            Assert.True(postResult?.Value?.Equals(true));
 
-            var removeResult = _appointment.Remove(testId, resData[0].Date) as NoContentResult;
+            Assert.IsType<List<Appointment>>(resultData);
+
+
+            var removeResult = _appointment.Remove(testId, resultData[0].Date) as NoContentResult;
+            _appointment.Remove(resultData[0].Id, resultData[0].Date);
+            _appointment.Remove(resultData[0].Id, resultData[0].Date);
             Assert.Equal(204, removeResult?.StatusCode);
         }
         [Fact]
@@ -68,8 +111,13 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = DateTime.Now.AddMinutes(4),
                 EndTime = DateTime.Now.AddMinutes(25),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = MockDatas.base64,
+                    ContentName = "Calendar",
+                    ContentType = "image",
+                }
             };
-
             //Act
             var result = _appointment.CreateAppointment(testData);
             var result_2 = _appointment.CreateAppointment(data);
@@ -103,6 +151,12 @@ namespace DisprzTraining.Tests
                 Type = "Reminder",
                 StartTime = DateTime.Now.AddMinutes(35),
                 EndTime = DateTime.Now.AddMinutes(50),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             //--- new starttime is between other meetings
@@ -115,6 +169,12 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = DateTime.Now.AddMinutes(45),
                 EndTime = DateTime.Now.AddHours(6),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             //---end-time conflicts with other meetings
             AddNewAppointment data_4 = new AddNewAppointment()
@@ -125,6 +185,12 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = DateTime.Now.AddMinutes(20),
                 EndTime = DateTime.Now.AddMinutes(45),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             //---other meeting is within new time
@@ -136,6 +202,12 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = DateTime.Now.AddMinutes(20),
                 EndTime = DateTime.Now.AddHours(7),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             //Act
             var result = _appointment.CreateAppointment(testData);
@@ -160,9 +232,8 @@ namespace DisprzTraining.Tests
             Assert.Equal(409, postResult_3?.StatusCode);
             Assert.Equal(409, postResult_4?.StatusCode);
 
-            var removeResult = _appointment.Remove(getData[0].Id, testData.Date);
-            Assert.IsType<NoContentResult>(removeResult);
-
+            var removeResult = _appointment.Remove(getData[0].Id, testData.Date) as NoContentResult;
+            Assert.Equal(204, removeResult.StatusCode);
         }
 
         [Fact]
@@ -177,6 +248,12 @@ namespace DisprzTraining.Tests
                 Type = "Reminder",
                 StartTime = new DateTime(2023, 01, 31, 11, 0, 0),
                 EndTime = new DateTime(2023, 01, 31, 11, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             //Act
@@ -200,6 +277,12 @@ namespace DisprzTraining.Tests
                 Type = "Reminder",
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now.AddMinutes(-30),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             //Act
@@ -211,7 +294,7 @@ namespace DisprzTraining.Tests
         }
 
         [Fact]
-        public void Create_Appointment_Returns_Status_Badrequest_StartTime_Is_Past_Time()
+        public void Create_Appointment_Returns_Status_Badrequest_StartTime_Is_Past_Time_And_Base64_Format_Is_Wrong()
         {
             //Arrange
             AddNewAppointment data = new AddNewAppointment()
@@ -222,21 +305,82 @@ namespace DisprzTraining.Tests
                 Type = "Reminder",
                 StartTime = DateTime.Now.AddHours(-1),
                 EndTime = DateTime.Now,
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
+            };
+
+            AddNewAppointment data_2 = new AddNewAppointment()
+            {
+                Date = DateTime.Now,
+                Title = "test-5",
+                Description = "test-case",
+                Type = "Reminder",
+                StartTime = DateTime.Now.AddHours(1),
+                EndTime = DateTime.Now.AddHours(3),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "ljlkhgvhhcvhnmjguychcvmghj",
+                    ContentName = "Calender",
+                    ContentType = "image",
+                }
+            };
+
+            AddNewAppointment data_3 = new AddNewAppointment()
+            {
+                Date = DateTime.Now,
+                Title = "test-5",
+                Description = "test-case",
+                Type = "Reminder",
+                StartTime = DateTime.Now.AddHours(1),
+                EndTime = DateTime.Now.AddHours(3),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "data:image/webp;base64,rdrytfyugukhijlolityd",
+                    ContentName = "Calender",
+                    ContentType = "image",
+                }
+            };
+
+            AddNewAppointment data_4 = new AddNewAppointment()
+            {
+                Date = DateTime.Now,
+                Title = "test-5",
+                Description = "test-case",
+                Type = "Reminder",
+                StartTime = DateTime.Now.AddHours(1),
+                EndTime = DateTime.Now.AddHours(3),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = MockDatas.base64,
+                    ContentName = " ",
+                    ContentType = "image",
+                }
             };
 
             //Act
             var result = _appointment.CreateAppointment(data) as BadRequestObjectResult;
+            var result_2 = _appointment.CreateAppointment(data_2) as BadRequestObjectResult;
+            var result_3 = _appointment.CreateAppointment(data_3) as BadRequestObjectResult;
+            var result_4 = _appointment.CreateAppointment(data_4) as BadRequestObjectResult;
             var value = JsonConvert.DeserializeObject<CustomCodes>((string)result.Value);
+            var value_2 = JsonConvert.DeserializeObject<CustomCodes>((string)result_2.Value);
 
             //Assert
             Assert.Equal("Unable to add Event in current event-duration", value.message);
+            Assert.Equal("Invalid Content as Attachment", value_2.message);
             Assert.Equal(400, result?.StatusCode);
+            Assert.Equal(400, result_2.StatusCode);
+            Assert.Equal(400, result_3?.StatusCode);
+            Assert.Equal(400, result_4?.StatusCode);
         }
 
         [Fact]
         public void Get_Appointments__Returns_Status_Ok()
         {
-
             //Act
             var create = _appointment.CreateAppointment(testData);
             var result = _appointment.GetAppointmentsByDate(testData.Date);
@@ -258,80 +402,128 @@ namespace DisprzTraining.Tests
             //Arrange
             AddNewAppointment data_1 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 26),
+                Date = new DateTime(2024, 01, 26),
                 Title = "test",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 01, 26, 11, 0, 0),
-                EndTime = new DateTime(2023, 01, 26, 12, 0, 0),
+                StartTime = new DateTime(2024, 01, 26, 11, 0, 0),
+                EndTime = new DateTime(2024, 01, 26, 12, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             AddNewAppointment data_2 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 27),
+                Date = new DateTime(2024, 01, 27),
                 Title = "test",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 01, 27, 11, 0, 0),
-                EndTime = new DateTime(2023, 01, 27, 12, 0, 0)
+                StartTime = new DateTime(2024, 01, 27, 11, 0, 0),
+                EndTime = new DateTime(2024, 01, 27, 12, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             AddNewAppointment data_3 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 27),
+                Date = new DateTime(2024, 01, 27),
                 Title = "test",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 01, 27, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 27, 14, 0, 0)
+                StartTime = new DateTime(2024, 01, 27, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 27, 14, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             AddNewAppointment data_4 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 28),
+                Date = new DateTime(2024, 01, 28),
                 Title = "test",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 01, 28, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 28, 14, 0, 0)
+                StartTime = new DateTime(2024, 01, 28, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 28, 14, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             AddNewAppointment data_5 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 29),
+                Date = new DateTime(2024, 01, 29),
                 Title = "test",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 01, 29, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 29, 14, 0, 0)
+                StartTime = new DateTime(2024, 01, 29, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 29, 14, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             AddNewAppointment data_6 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 30),
+                Date = new DateTime(2024, 01, 30),
                 Title = "test",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 01, 30, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 30, 14, 0, 0)
+                StartTime = new DateTime(2024, 01, 30, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 30, 14, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             //--out of range event
             AddNewAppointment data_7 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 02, 03),
+                Date = new DateTime(2024, 02, 03),
                 Title = "test",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 02, 03, 13, 0, 0),
-                EndTime = new DateTime(2023, 02, 03, 14, 0, 0)
+                StartTime = new DateTime(2024, 02, 03, 13, 0, 0),
+                EndTime = new DateTime(2024, 02, 03, 14, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             //get-ignored
             AddNewAppointment data_8 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 25),
+                Date = new DateTime(2024, 01, 25),
                 Title = "test-8",
                 Description = "test-case",
                 Type = "Reminder",
-                StartTime = new DateTime(2023, 01, 25, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 25, 14, 0, 0)
+                StartTime = new DateTime(2024, 01, 25, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 25, 14, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
-            DateTime date = new DateTime(2023, 01, 26);
+            DateTime date = new DateTime(2024, 01, 26);
             DateTime endRange = date.AddDays(7);
             //Act
             _appointment.CreateAppointment(data_1);
@@ -447,6 +639,12 @@ namespace DisprzTraining.Tests
                     Type = "out of office",
                     StartTime = DateTime.Now.AddHours(3),
                     EndTime = DateTime.Now.AddHours(5),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = testData.Date
             });
@@ -466,12 +664,17 @@ namespace DisprzTraining.Tests
                     Type = "Event",
                     StartTime = new DateTime(2023, 02, 01, 17, 0, 0),
                     EndTime = new DateTime(2023, 02, 01, 17, 30, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = MockDatas.base64,
+                        ContentName = "Calendar",
+                        ContentType = "image",
+                    },
                 },
                 OldDate = testData.Date
             };
 
             //Assert
-
             Assert.Equal(200, updatedResult?.StatusCode);
             Assert.Equal("test-updated", result[0].Title);
             Assert.Equal("test-case", result[0].Description);
@@ -492,7 +695,6 @@ namespace DisprzTraining.Tests
         public void Update_Appoitments_Returns_Status_Conflict_Meeting_Is_Already_Assigned()
         {
             //Arrange
-
             AddNewAppointment data_2 = new AddNewAppointment()
             {
                 Date = testData.Date,
@@ -501,6 +703,12 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = DateTime.Now.AddHours(4.5),
                 EndTime = DateTime.Now.AddHours(5),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             AddNewAppointment data_3 = new AddNewAppointment()
@@ -511,6 +719,12 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = new DateTime(2023, 02, 02, 2, 0, 0),
                 EndTime = new DateTime(2023, 02, 02, 3, 0, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             //Act
             var newEvent = _appointment.CreateAppointment(testData);
@@ -535,6 +749,12 @@ namespace DisprzTraining.Tests
                     Type = "Event",
                     StartTime = DateTime.Now.AddMinutes(32),
                     EndTime = DateTime.Now.AddHours(1),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date,
             });
@@ -551,6 +771,12 @@ namespace DisprzTraining.Tests
                     Type = "Event",
                     StartTime = DateTime.Now.AddMinutes(45),
                     EndTime = DateTime.Now.AddHours(6),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -567,6 +793,12 @@ namespace DisprzTraining.Tests
                     Type = "Event",
                     StartTime = DateTime.Now.AddMinutes(5),
                     EndTime = DateTime.Now.AddMinutes(50),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -584,6 +816,12 @@ namespace DisprzTraining.Tests
                     Type = "Event",
                     StartTime = DateTime.Now.AddMinutes(5),
                     EndTime = DateTime.Now.AddHours(7),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -600,6 +838,12 @@ namespace DisprzTraining.Tests
                     Type = "Reminder",
                     StartTime = new DateTime(2023, 02, 02, 2, 0, 0),
                     EndTime = new DateTime(2023, 02, 02, 3, 0, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -616,6 +860,12 @@ namespace DisprzTraining.Tests
                     Type = "Reminder",
                     StartTime = new DateTime(2023, 02, 02, 1, 45, 0),
                     EndTime = new DateTime(2023, 02, 02, 3, 45, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -632,6 +882,12 @@ namespace DisprzTraining.Tests
                     Type = "Reminder",
                     StartTime = new DateTime(2023, 02, 02, 2, 15, 0),
                     EndTime = new DateTime(2023, 02, 02, 3, 45, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -648,6 +904,12 @@ namespace DisprzTraining.Tests
                     Type = "Reminder",
                     StartTime = new DateTime(2023, 02, 02, 1, 15, 0),
                     EndTime = new DateTime(2023, 02, 02, 2, 45, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -660,8 +922,9 @@ namespace DisprzTraining.Tests
             var result_3 = Assert.IsType<ConflictObjectResult>(updateEvent_4);
             var result_4 = Assert.IsType<ConflictObjectResult>(updateEvent_5);
             var result_5 = Assert.IsType<ConflictObjectResult>(updateEvent_6);
+            var result_6 = Assert.IsType<ConflictObjectResult>(updateEvent_7);
             var value = JsonConvert.DeserializeObject<CustomCodes>((string)result?.Value);
-            Assert.IsType<ConflictObjectResult>(updateEvent_7);
+            Assert.Equal(409, result_6.StatusCode);
             Assert.Equal(409, result.StatusCode);
             Assert.Equal(409, result_2.StatusCode);
             Assert.Equal(409, result_3.StatusCode);
@@ -686,6 +949,12 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = DateTime.Now.AddHours(2),
                 EndTime = DateTime.Now.AddHours(3),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
             //Act
             _appointment.CreateAppointment(testData);
@@ -705,6 +974,12 @@ namespace DisprzTraining.Tests
                     Type = "Event",
                     StartTime = testData.StartTime.AddHours(4),
                     EndTime = DateTime.Now.AddMinutes(-30),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
@@ -723,24 +998,31 @@ namespace DisprzTraining.Tests
                     Type = "out of office",
                     StartTime = DateTime.Now.AddMinutes(-30),
                     EndTime = DateTime.Now.AddMinutes(-10),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data_2.Date
             });
             var updatedResult_2 = updateEvent_2 as BadRequestObjectResult;
+
             var value_2 = JsonConvert.DeserializeObject<CustomCodes>((string)updatedResult_2.Value);
 
             //Assert
             Assert.Equal("Cannot initiate event as StartTime is Greater than endTime", value?.message);
             Assert.Equal("Unable to add Event in current event-duration", value_2?.message);
             Assert.Equal(400, updatedResult.StatusCode);
-            Assert.IsType<BadRequestObjectResult>(updateEvent_2);
+            Assert.Equal(400, updatedResult_2.StatusCode);
 
             _appointment.Remove(getData[0].Id, getData[0].Date);
             var removeResult = _appointment.Remove(getData_1[0].Id, getData_1[0].Date);
 
         }
         [Fact]
-        public void Update_Appoitments_Returns_Badrequest_When_start_Time_And_End_Time_Same()
+        public void Update_Appoitments_Returns_Badrequest_When_start_Time_And_End_Time_Same_And_Attachment_Invalid()
         {
             //Arrange
             AddNewAppointment data = new AddNewAppointment()
@@ -751,6 +1033,12 @@ namespace DisprzTraining.Tests
                 Type = "Reminder",
                 StartTime = new DateTime(2023, 01, 31, 4, 50, 0),
                 EndTime = new DateTime(2023, 01, 31, 5, 20, 0),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             //Act
@@ -759,7 +1047,7 @@ namespace DisprzTraining.Tests
             var getData = GetTestData(getResult);
 
             var getId = getData[0].Id;
-            var toUpdate = _appointment.Update(new UpdateAppointment()
+            var updateEvent = _appointment.Update(new UpdateAppointment()
             {
                 Appointment = new Appointment()
                 {
@@ -770,22 +1058,74 @@ namespace DisprzTraining.Tests
                     Type = "out of office",
                     StartTime = new DateTime(2023, 01, 31, 4, 50, 0),
                     EndTime = new DateTime(2023, 01, 31, 4, 50, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = data.Date
             });
-            var updatedResult = toUpdate as BadRequestObjectResult;
+
+            var updateEvent_2 = _appointment.Update(new UpdateAppointment()
+            {
+                Appointment = new Appointment()
+                {
+                    Id = getId,
+                    Date = data.Date,
+                    Title = "test-updated",
+                    Description = "test-case",
+                    Type = "out of office",
+                    StartTime = new DateTime(2023, 01, 31, 4, 50, 0),
+                    EndTime = new DateTime(2023, 01, 31, 5, 50, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = MockDatas.dummyBase64,
+                        ContentName = "Calender",
+                        ContentType = "image",
+                    }
+                },
+                OldDate = data.Date
+            });
+            var updateEvent_3 = _appointment.Update(new UpdateAppointment()
+            {
+                Appointment = new Appointment()
+                {
+                    Id = getId,
+                    Date = data.Date,
+                    Title = "test-updated",
+                    Description = "test-case",
+                    Type = "out of office",
+                    StartTime = new DateTime(2023, 01, 31, 4, 50, 0),
+                    EndTime = new DateTime(2023, 01, 31, 5, 50, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = MockDatas.base64,
+                        ContentName = " ",
+                        ContentType = "image",
+                    }
+                },
+                OldDate = data.Date
+            });
+            var updatedResult = updateEvent as BadRequestObjectResult;
+            var updatedResult_2 = updateEvent_2 as BadRequestObjectResult;
+            var updatedResult_3 = updateEvent_3 as BadRequestObjectResult;
+
             var value = JsonConvert.DeserializeObject<CustomCodes>((string)updatedResult.Value);
-
+            var value_2 = JsonConvert.DeserializeObject<CustomCodes>((string)updatedResult_2.Value);
             //Assert
-
-            Assert.IsType<BadRequestObjectResult>(toUpdate);
+            Assert.Equal(400, updatedResult.StatusCode);
+            Assert.Equal(400, updatedResult_2.StatusCode);
+            Assert.Equal(400, updatedResult_3.StatusCode);
             Assert.Equal("Cannot Add Event As StartTime And End Time Are Same", value.message);
+            Assert.Equal("Invalid Content as Attachment", value_2.message);
             var removeResult = _appointment.Remove(getId, getData[0].Date);
 
         }
 
         [Fact]
-        public void Update_Appoitments_Returns_Bad_Request_When_Date_OR_Id_Is_Wrong()
+        public void Update_Appoitments_Returns_Not_Found_When_Date_OR_Id_Is_Not_Correct()
         {
             //Arrange
 
@@ -807,10 +1147,16 @@ namespace DisprzTraining.Tests
                     Type = "out of office",
                     StartTime = DateTime.Now.AddMinutes(30),
                     EndTime = DateTime.Now.AddHours(3),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = testData.Date
             });
-            var updatedResult_2 = updateEvent as BadRequestObjectResult;
+            var updatedResult_2 = updateEvent as NotFoundObjectResult;
             var value_2 = JsonConvert.DeserializeObject<CustomCodes>((string)updatedResult_2.Value);
 
             //-id-invalid
@@ -825,6 +1171,12 @@ namespace DisprzTraining.Tests
                     Type = "out of office",
                     StartTime = new DateTime(2023, 01, 31, 4, 50, 0),
                     EndTime = new DateTime(2023, 01, 31, 5, 50, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = testData.Date
             });
@@ -840,19 +1192,25 @@ namespace DisprzTraining.Tests
                     Type = "out of office",
                     StartTime = new DateTime(2023, 01, 31, 4, 50, 0),
                     EndTime = new DateTime(2023, 01, 31, 5, 50, 0),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = new DateTime(2023, 01, 31)
             });
-            var updateResult_3 = (BadRequestObjectResult)(updateEvent_3);
+            var updateResult_3 = (NotFoundObjectResult)(updateEvent_3);
             var value_3 = JsonConvert.DeserializeObject<CustomCodes>((string)updateResult_3.Value);
+            var updateResult = Assert.IsType<NotFoundObjectResult>(updateEvent_2);
             //Assert
 
             Assert.Equal("Enter Valid Id", value_2?.message);
-            Assert.IsType<BadRequestObjectResult>(updateEvent);
-            var result = Assert.IsType<BadRequestObjectResult>(updateEvent_2);
             Assert.Equal("Invalid Date", value_3?.message);
-            Assert.Equal(400, result.StatusCode);
-            Assert.Equal(400, updateResult_3.StatusCode);
+            Assert.Equal(404, updateResult.StatusCode);
+            Assert.Equal(404, updatedResult_2.StatusCode);
+            Assert.Equal(404, updateResult_3.StatusCode);
             var removeResult = _appointment.Remove(getId, getData[0].Date);
         }
 
@@ -868,6 +1226,12 @@ namespace DisprzTraining.Tests
                 Type = "Event",
                 StartTime = DateTime.Now.AddMinutes(4),
                 EndTime = DateTime.Now.AddMinutes(25),
+                AppointmentAttachment = new Attachment()
+                {
+                    Content = "",
+                    ContentName = "",
+                    ContentType = "",
+                }
             };
 
             //Act
@@ -890,6 +1254,12 @@ namespace DisprzTraining.Tests
                     Type = "Event",
                     StartTime = DateTime.Now.AddHours(4),
                     EndTime = DateTime.Now.AddHours(6),
+                    AppointmentAttachment = new Attachment()
+                    {
+                        Content = "",
+                        ContentName = "",
+                        ContentType = "",
+                    }
                 },
                 OldDate = testData.Date
             });
@@ -907,6 +1277,7 @@ namespace DisprzTraining.Tests
 
 
         }
+
 
     }
 }

@@ -1,36 +1,33 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj": {}
+    "D:\\Training projects\\DisprzTraining-main\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj": {}
   },
   "projects": {
-    "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj": {
+    "D:\\Training projects\\DisprzTraining-main\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj",
+        "projectUniqueName": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj",
         "projectName": "DisprzTraining.Tests",
-        "projectPath": "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj",
-        "packagesPath": "C:\\Users\\Client\\.nuget\\packages\\",
-        "outputPath": "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining.Tests\\obj\\",
+        "projectPath": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining.Tests\\DisprzTraining.Tests.csproj",
+        "packagesPath": "C:\\Users\\lalith.m_disprz\\.nuget\\packages\\",
+        "outputPath": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Client\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\lalith.m_disprz\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://heuristix.pkgs.visualstudio.com/_packaging/DisprzFeed/nuget/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining\\DisprzTraining.csproj": {
-                "projectPath": "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining\\DisprzTraining.csproj"
+              "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj": {
+                "projectPath": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj"
               }
             }
           }
@@ -45,6 +42,14 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[6.8.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.3.2, )"
@@ -90,26 +95,23 @@
         }
       }
     },
-    "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining\\DisprzTraining.csproj": {
+    "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining\\DisprzTraining.csproj",
+        "projectUniqueName": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj",
         "projectName": "DisprzTraining",
-        "projectPath": "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining\\DisprzTraining.csproj",
-        "packagesPath": "C:\\Users\\Client\\.nuget\\packages\\",
-        "outputPath": "D:\\Malcom\\ReportBuilder\\DisprzTraining\\DisprzTraining\\obj\\",
+        "projectPath": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj",
+        "packagesPath": "C:\\Users\\lalith.m_disprz\\.nuget\\packages\\",
+        "outputPath": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Client\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\lalith.m_disprz\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://heuristix.pkgs.visualstudio.com/_packaging/DisprzFeed/nuget/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {

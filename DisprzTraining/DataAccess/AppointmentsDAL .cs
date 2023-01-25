@@ -56,6 +56,12 @@ namespace DisprzTraining.DataAccess
                         Type = data.Type,
                         StartTime = data.StartTime,
                         EndTime = data.EndTime,
+                        AppointmentAttachment=new Attachment()
+                        {
+                            Content=data.AppointmentAttachment.Content,
+                            ContentName=data.AppointmentAttachment.ContentName,
+                            ContentType=data.AppointmentAttachment.ContentType,
+                        },
                     });
 
                     existingList.Sort((x, y) => x.StartTime.CompareTo(y.StartTime));
@@ -77,8 +83,15 @@ namespace DisprzTraining.DataAccess
                         Type = data.Type,
                         StartTime = data.StartTime,
                         EndTime = data.EndTime,
+                        AppointmentAttachment=new Attachment()
+                        {
+                            Content=data.AppointmentAttachment.Content,
+                            ContentName=data.AppointmentAttachment.ContentName,
+                            ContentType=data.AppointmentAttachment.ContentType,
+                        },
                 }
                 });
+
                 return true;
             }
         }
@@ -92,16 +105,34 @@ namespace DisprzTraining.DataAccess
             }
             else
                 return new List<Appointment>();
-
         }
         public List<Appointment> GetRangedList(DateTime date)
         {
             List<Appointment> value = new List<Appointment>();
             DateTime convertedDate = date.Date;
-            DateTime keyDate = convertedDate;
-            for (int i = 0; i < 7; i++)
+            DateTime startRange = convertedDate;
+            DateTime endRange = convertedDate.AddDays(7);
+            // for (int i = 0; i < 7; i++)
+            // {
+            //     if (DataStore.dictionaryData.TryGetValue(startRange, out List<Appointment> existingList))
+            //     {
+            //         foreach (var item in existingList)
+            //         {
+            //             if (item.EndTime > convertedDate && item.EndTime > DateTime.Now)
+            //             {
+            //                 value.Add(item);
+            //             }
+            //         }
+            //     }
+            //     startRange = startRange.AddDays(1);
+            // }
+            foreach (KeyValuePair<DateTime, List<Appointment>> range in DataStore.dictionaryData.OrderBy(x => x.Key))
             {
-                if (DataStore.dictionaryData.TryGetValue(keyDate, out List<Appointment> existingList))
+                if (range.Key > endRange)
+                {
+                    break;
+                }
+                if (DataStore.dictionaryData.TryGetValue(range.Key, out List<Appointment> existingList))
                 {
                     foreach (var item in existingList)
                     {
@@ -111,19 +142,18 @@ namespace DisprzTraining.DataAccess
                         }
                     }
                 }
-                keyDate = keyDate.AddDays(1);
             }
             return value;
         }
-        public bool RemoveAppointmentsById(Guid id, DateTime date)
+        public bool RemoveAppointmentById(Guid id, DateTime date)
         {
             DateTime convertedDate = date.Date;
-            if (DataStore.dictionaryData.TryGetValue(convertedDate, out List<Appointment> list))
+            if (DataStore.dictionaryData.TryGetValue(convertedDate, out List<Appointment> existingList))
             {
-                var remove = list.Find(r => r.Id == id);
+                var remove = existingList.Find(r => r.Id == id);
                 if (remove != null)
                 {
-                    list.Remove(remove);
+                    existingList.Remove(remove);
                     if (DataStore.dictionaryData[convertedDate].Count == 0)
                         DataStore.dictionaryData.Remove(convertedDate);
                     return true;
@@ -142,31 +172,29 @@ namespace DisprzTraining.DataAccess
         public bool UpdateAppointmentById(Appointment data)
         {
             DateTime date = (data.Date).Date;
-                 
-            // if (DataStore.dictionaryData.TryGetValue(date, out List<Appointment> list))
-            // {
-                List<Appointment>list=DataStore.dictionaryData[date];
-                bool noConflict = CheckUpdateConflict(list, data);
-                if (noConflict)
+            List<Appointment> listToUpdate = DataStore.dictionaryData[date];
+            bool noConflict = CheckUpdateConflict(listToUpdate, data);
+            if (noConflict)
+            {
+                var valueToBeUpdated = listToUpdate.Find(x => x.Id == data.Id);
+                valueToBeUpdated.Title = data.Title;
+                valueToBeUpdated.Description = data.Description;
+                valueToBeUpdated.Type = data.Type;
+                valueToBeUpdated.StartTime = data.StartTime;
+                valueToBeUpdated.EndTime = data.EndTime;
+                valueToBeUpdated.AppointmentAttachment=new Attachment()
                 {
-                    var valueToBeUpdated = list.Find(x => x.Id == data.Id);
-                    valueToBeUpdated.Title = data.Title;
-                    valueToBeUpdated.Description = data.Description;
-                    valueToBeUpdated.Type = data.Type;
-                    valueToBeUpdated.StartTime = data.StartTime;
-                    valueToBeUpdated.EndTime = data.EndTime;
-                    list.Sort((x, y) => x.StartTime.CompareTo(y.StartTime));
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            // }
-            // else
-            // {
-            //     throw new Exception(JsonConvert.SerializeObject(CustomErrorCodeMessages.invalidDate));
-            // }
+                    Content=data.AppointmentAttachment.Content,
+                    ContentName=data.AppointmentAttachment.ContentName,
+                    ContentType=data.AppointmentAttachment.ContentType,
+                };
+                listToUpdate.Sort((x, y) => x.StartTime.CompareTo(y.StartTime));
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public bool CheckForId(Guid id, DateTime date)
         {
@@ -180,7 +208,7 @@ namespace DisprzTraining.DataAccess
             }
             else
             {
-                throw new Exception(JsonConvert.SerializeObject(CustomErrorCodeMessages.invalidDate));
+                throw new ArgumentException(JsonConvert.SerializeObject(CustomErrorCodeMessages.invalidDate));
             }
         }
     }
