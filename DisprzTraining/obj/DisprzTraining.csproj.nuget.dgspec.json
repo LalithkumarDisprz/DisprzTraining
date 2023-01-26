@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj": {}
+    "d:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj": {}
   },
   "projects": {
-    "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj": {
+    "d:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj",
+        "projectUniqueName": "d:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj",
         "projectName": "DisprzTraining",
-        "projectPath": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj",
+        "projectPath": "d:\\Training projects\\DisprzTraining-main\\DisprzTraining\\DisprzTraining.csproj",
         "packagesPath": "C:\\Users\\lalith.m_disprz\\.nuget\\packages\\",
-        "outputPath": "D:\\Training projects\\DisprzTraining-main\\DisprzTraining\\obj\\",
+        "outputPath": "d:\\Training projects\\DisprzTraining-main\\DisprzTraining\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\lalith.m_disprz\\AppData\\Roaming\\NuGet\\NuGet.Config"
