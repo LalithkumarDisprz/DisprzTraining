@@ -106,26 +106,9 @@ namespace DisprzTraining.DataAccess
             else
                 return new List<Appointment>();
         }
-        public List<Appointment> GetRangedList(DateTime date)
+        public List<Appointment> GetRangedList(DateTime startRange,DateTime endRange)
         {
             List<Appointment> value = new List<Appointment>();
-            DateTime convertedDate = date.Date;
-            DateTime startRange = convertedDate;
-            DateTime endRange = convertedDate.AddDays(7);
-            // for (int i = 0; i < 7; i++)
-            // {
-            //     if (DataStore.dictionaryData.TryGetValue(startRange, out List<Appointment> existingList))
-            //     {
-            //         foreach (var item in existingList)
-            //         {
-            //             if (item.EndTime > convertedDate && item.EndTime > DateTime.Now)
-            //             {
-            //                 value.Add(item);
-            //             }
-            //         }
-            //     }
-            //     startRange = startRange.AddDays(1);
-            // }
             foreach (KeyValuePair<DateTime, List<Appointment>> range in DataStore.dictionaryData.OrderBy(x => x.Key))
             {
                 if (range.Key > endRange)
@@ -136,7 +119,7 @@ namespace DisprzTraining.DataAccess
                 {
                     foreach (var item in existingList)
                     {
-                        if (item.EndTime > convertedDate && item.EndTime > DateTime.Now)
+                        if (item.EndTime > startRange && item.EndTime > DateTime.Now)
                         {
                             value.Add(item);
                         }

@@ -38,9 +38,15 @@ namespace DisprzTraining.Business
 
         }
 
-        public List<Appointment> GetRangedList(DateTime date)
+        public List<Appointment> GetRangedList(DateTime startDate,DateTime endDate)
         {
-            return _appointmentsDAL.GetRangedList(date);
+            DateTime startRange = startDate.Date;
+            DateTime endRange = endDate.Date;
+            if(endRange<startRange)
+            {
+                throw new Exception(JsonConvert.SerializeObject(CustomErrorCodeMessages.invalidRange));
+            }
+            return _appointmentsDAL.GetRangedList(startRange,endRange);
         }
 
         public bool RemoveAppointment(Guid id, DateTime date)
@@ -122,42 +128,32 @@ namespace DisprzTraining.Business
             string base64 = attachedData.Content;
             if (String.IsNullOrWhiteSpace(base64))
             {
-
+                return true;
+            }
+            else if (String.IsNullOrWhiteSpace(attachedData.ContentName) || String.IsNullOrWhiteSpace(attachedData.ContentType))
+            {
+                return false;
+            }
+            else if (base64.Contains(","))
+            {
+                var splittedString = base64.Split(new char[] { ',' }, StringSplitOptions.None);
+                base64 = splittedString[1].Trim();
+                if ((base64.Length % 4 == 0) && Regex.IsMatch(base64, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if ((base64.Length % 4 == 0) && Regex.IsMatch(base64, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None))
+            {
                 return true;
             }
             else
             {
-                if (String.IsNullOrWhiteSpace(attachedData.ContentName) || String.IsNullOrWhiteSpace(attachedData.ContentType))
-                {
-                    return false;
-                }
-                else
-                {
-                    if (base64.Contains(","))
-                    {
-                        var splittedString = base64.Split(new char[] { ',' }, StringSplitOptions.None);
-                        base64 = splittedString[1].Trim();
-                        if ((base64.Length % 4 == 0) && Regex.IsMatch(base64, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if ((base64.Length % 4 == 0) && Regex.IsMatch(base64, @"^[a-zA-Z0-9\+/]*={0,3}$", RegexOptions.None))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
+                return false;
             }
         }
     }

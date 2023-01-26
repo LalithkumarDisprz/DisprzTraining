@@ -596,12 +596,12 @@ namespace DisprzTraining.Tests
             //Arrange
             AddNewAppointment data_1 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 26),
+                Date = new DateTime(2024, 01, 26),
                 Title = "test",
                 Description = "test-case",
                 Type = "reminder",
-                StartTime = new DateTime(2023, 01, 26, 11, 0, 0),
-                EndTime = new DateTime(2023, 01, 26, 12, 0, 0),
+                StartTime = new DateTime(2024, 01, 26, 11, 0, 0),
+                EndTime = new DateTime(2024, 01, 26, 12, 0, 0),
                 AppointmentAttachment = new Attachment()
                     {
                         Content = "",
@@ -611,12 +611,12 @@ namespace DisprzTraining.Tests
             };
             AddNewAppointment data_2 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 27),
+                Date = new DateTime(2024, 01, 27),
                 Title = "test",
                 Description = "test-case",
                 Type = "reminder",
-                StartTime = new DateTime(2023, 01, 27, 11, 0, 0),
-                EndTime = new DateTime(2023, 01, 27, 12, 0, 0),
+                StartTime = new DateTime(2024, 01, 27, 11, 0, 0),
+                EndTime = new DateTime(2024, 01, 27, 12, 0, 0),
                 AppointmentAttachment = new Attachment()
                     {
                         Content = "",
@@ -626,12 +626,12 @@ namespace DisprzTraining.Tests
             };
             AddNewAppointment data_3 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 27),
+                Date = new DateTime(2024, 01, 27),
                 Title = "test",
                 Description = "test-case",
                 Type = "reminder",
-                StartTime = new DateTime(2023, 01, 27, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 27, 14, 0, 0),
+                StartTime = new DateTime(2024, 01, 27, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 27, 14, 0, 0),
                 AppointmentAttachment = new Attachment()
                     {
                         Content = "",
@@ -641,12 +641,12 @@ namespace DisprzTraining.Tests
             };
             AddNewAppointment data_4 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 28),
+                Date = new DateTime(2024, 01, 28),
                 Title = "test",
                 Description = "test-case",
                 Type = "reminder",
-                StartTime = new DateTime(2023, 01, 28, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 28, 14, 0, 0),
+                StartTime = new DateTime(2024, 01, 28, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 28, 14, 0, 0),
                 AppointmentAttachment = new Attachment()
                     {
                         Content = "",
@@ -656,12 +656,12 @@ namespace DisprzTraining.Tests
             };
             AddNewAppointment data_5 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 29),
+                Date = new DateTime(2024, 01, 29),
                 Title = "test",
                 Description = "test-case",
                 Type = "reminder",
-                StartTime = new DateTime(2023, 01, 29, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 29, 14, 0, 0),
+                StartTime = new DateTime(2024, 01, 29, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 29, 14, 0, 0),
                 AppointmentAttachment = new Attachment()
                     {
                         Content = "",
@@ -671,12 +671,12 @@ namespace DisprzTraining.Tests
             };
             AddNewAppointment data_6 = new AddNewAppointment()
             {
-                Date = new DateTime(2023, 01, 30),
+                Date = new DateTime(2024, 01, 30),
                 Title = "test",
                 Description = "test-case",
                 Type = "reminder",
-                StartTime = new DateTime(2023, 01, 30, 13, 0, 0),
-                EndTime = new DateTime(2023, 01, 30, 14, 0, 0),
+                StartTime = new DateTime(2024, 01, 30, 13, 0, 0),
+                EndTime = new DateTime(2024, 01, 30, 14, 0, 0),
                 AppointmentAttachment = new Attachment()
                     {
                         Content = "",
@@ -684,21 +684,7 @@ namespace DisprzTraining.Tests
                         ContentType = "",
                     }
             };
-            AddNewAppointment data_7 = new AddNewAppointment()
-            {
-                Date = new DateTime(2023, 02, 03),
-                Title = "test",
-                Description = "test-case",
-                Type = "Reminder",
-                StartTime = new DateTime(2023, 02, 03, 13, 0, 0),
-                EndTime = new DateTime(2023, 02, 03, 14, 0, 0),
-                AppointmentAttachment = new Attachment()
-                    {
-                        Content = "",
-                        ContentName = "",
-                        ContentType = "",
-                    }
-            };
+         
 
             // DateTime date = new DateTime(2023, 01, 26);
 
@@ -709,18 +695,19 @@ namespace DisprzTraining.Tests
             await _httpclient.PostAsync(BASEURL, TestHelper.GetStringContent(data_4));
             await _httpclient.PostAsync(BASEURL, TestHelper.GetStringContent(data_5));
             await _httpclient.PostAsync(BASEURL,TestHelper.GetStringContent(data_6));
-            await _httpclient.PostAsync(BASEURL,TestHelper.GetStringContent(data_7));
 
-            var response_2 = await _httpclient.GetAsync($"{BASEURL}/range/2023-01-26T00:00:00");
+            var response_2 = await _httpclient.GetAsync($"{BASEURL}/range/2024-01-26T00:00:00/2024-02-02T00:00:00");
+            var response_3 = await _httpclient.GetAsync($"{BASEURL}/range/2024-01-26T00:00:00/2024-01-25T00:00:00");
             var content_2 = response_2.Content.ReadFromJsonAsync<List<Appointment>>();
 
             //Assert
-            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2023-01-31T00:00:00");
-            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2023-01-31T00:00:00");
-            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2023-01-31T00:00:00");
-            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2023-01-31T00:00:00");
-            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2023-01-31T00:00:00");
+            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2024-01-31T00:00:00");
+            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2024-01-31T00:00:00");
+            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2024-01-31T00:00:00");
+            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2024-01-31T00:00:00");
+            await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[0].Id}/2024-01-31T00:00:00");
             Assert.Equal(HttpStatusCode.OK,response_2.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest,response_3.StatusCode);
             Assert.Equal(6,content_2?.Result?.Count);
             // CleanUp();
 

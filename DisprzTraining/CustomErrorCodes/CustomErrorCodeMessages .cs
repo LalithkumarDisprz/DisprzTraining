@@ -50,5 +50,10 @@ namespace DisprzTraining.CustomErrorCodes
             message = "Unable to process the data check your inputs",
             errorCode = "INVALID_INPUTS",
         };
+         public static CustomCodes invalidRange = new CustomCodes()
+        {
+            message = "Endrange is lesser than startrange",
+            errorCode = "INVALID_RANGE",
+        };
     }
 }

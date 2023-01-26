@@ -397,7 +397,7 @@ namespace DisprzTraining.Tests
         }
 
         [Fact]
-        public void Get_List_By_Range_Returns_Ok()
+        public void Get_List_By_Range_Returns_Ok_And_Bad_Request()
         {
             //Arrange
             AddNewAppointment data_1 = new AddNewAppointment()
@@ -523,8 +523,9 @@ namespace DisprzTraining.Tests
                     ContentType = "",
                 }
             };
-            DateTime date = new DateTime(2024, 01, 26);
-            DateTime endRange = date.AddDays(7);
+            DateTime startRange = new DateTime(2024, 01, 26);
+            DateTime endRange = startRange.AddDays(7);
+            DateTime endRange_2=startRange.AddDays(-1);
             //Act
             _appointment.CreateAppointment(data_1);
             _appointment.CreateAppointment(data_2);
@@ -535,8 +536,10 @@ namespace DisprzTraining.Tests
             _appointment.CreateAppointment(data_7);
             _appointment.CreateAppointment(data_8);
 
-            var getResult = _appointment.GetListByRange(date);
+            var getResult = _appointment.GetListByRange(startRange,endRange);
+            var getResult_2 = _appointment.GetListByRange(startRange,endRange_2);
             var value = getResult.Result as OkObjectResult;
+            var value_2=getResult_2.Result as BadRequestObjectResult;
             var getData = GetTestData(getResult);
             var getResultData_7 = _appointment.GetAppointmentsByDate(data_7.Date);
             var getResultData_8 = _appointment.GetAppointmentsByDate(data_8.Date);
@@ -546,8 +549,9 @@ namespace DisprzTraining.Tests
             //Assert
             Assert.Equal(200, value?.StatusCode);
             Assert.Equal(6, getData.Count); //---out of range element not added;
-            Assert.InRange(getData[0].EndTime, date, endRange);
-            Assert.InRange(getData[5].EndTime, date, endRange);
+            Assert.InRange(getData[0].EndTime, startRange, endRange);
+            Assert.InRange(getData[5].EndTime, startRange, endRange);
+            Assert.Equal(400,value_2.StatusCode);
 
             var remove_1 = _appointment.Remove(getData[5].Id, getData[5].Date);
             var remove_2 = _appointment.Remove(getData[4].Id, getData[4].Date);
