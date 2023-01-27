@@ -441,7 +441,6 @@ namespace DisprzTraining.Tests
             await _httpclient.DeleteAsync($"{BASEURL}/{content_2.Result[1].Id}/2023-01-31T00:00:00");
             var deleteResponse = await _httpclient.DeleteAsync($"{BASEURL}/{getId}/2023-01-31T00:00:00");
             await _httpclient.DeleteAsync($"{BASEURL}/{content_3.Result[0].Id}/2023-01-31T00:00:00");
-
         }
 
         [Fact]
@@ -497,6 +496,7 @@ namespace DisprzTraining.Tests
 
             //Act
             var response = await _httpclient.PostAsync(BASEURL, TestHelper.GetStringContent(data));
+
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();
@@ -684,10 +684,7 @@ namespace DisprzTraining.Tests
                         ContentType = "",
                     }
             };
-         
-
-            // DateTime date = new DateTime(2023, 01, 26);
-
+           
             //Act
             await _httpclient.PostAsync(BASEURL, TestHelper.GetStringContent(data_1));
             await _httpclient.PostAsync(BASEURL, TestHelper.GetStringContent(data_2));
@@ -709,7 +706,6 @@ namespace DisprzTraining.Tests
             Assert.Equal(HttpStatusCode.OK,response_2.StatusCode);
             Assert.Equal(HttpStatusCode.BadRequest,response_3.StatusCode);
             Assert.Equal(6,content_2?.Result?.Count);
-            // CleanUp();
 
         }
     }

@@ -51,7 +51,7 @@ namespace DisprzTraining.Controllers
         [HttpGet("{date}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Appointment>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<List<Appointment>> GetAppointmentsByDate([Required] DateTime date)
+        public ActionResult<List<Appointment>> GetAppointmentsByDate(DateTime date)
         {
 
             return Ok(_appointmentsBL.GetAppointmentsForSelectedDate(date));
@@ -60,7 +60,7 @@ namespace DisprzTraining.Controllers
         [HttpGet("range/{startDate}/{endDate}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Appointment>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest,Type= typeof(CustomCodes))]
-        public ActionResult<List<Appointment>> GetListByRange([Required]DateTime startDate,[Required]DateTime endDate)
+        public ActionResult<List<Appointment>> GetListByRange(DateTime startDate,DateTime endDate)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace DisprzTraining.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(CustomCodes))]
 
-        public IActionResult Remove([Required]Guid id,[Required]DateTime date)
+        public IActionResult Remove(Guid id,DateTime date)
         {
             bool idIsThere = _appointmentsBL.RemoveAppointment(id, date);
             if (idIsThere == true)

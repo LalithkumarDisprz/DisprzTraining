@@ -36,7 +36,6 @@ namespace DisprzTraining.DataAccess
             return true;
 
         }
-
         public bool CreateNewAppointments(AddNewAppointment data)
         {
 

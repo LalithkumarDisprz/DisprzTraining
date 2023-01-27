@@ -6,7 +6,7 @@ namespace DisprzTraining.Models
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please select a date")]
         public DateTime Date { get; set; }
-        [Required]
+        [Required (AllowEmptyStrings = false,ErrorMessage = "Please select a title")]
         public string Title { get; set; }
         public string? Description { get; set; }
         public string? Type { get; set; }

@@ -39,7 +39,6 @@ namespace DisprzTraining.CustomErrorCodes
             message = "Invalid Date or id",
             errorCode = "INVALID_DATE_ID",
         };
-        
         public static CustomCodes invalidAttachment = new CustomCodes()
         {
             message = "Invalid Content as Attachment",
@@ -55,5 +54,6 @@ namespace DisprzTraining.CustomErrorCodes
             message = "Endrange is lesser than startrange",
             errorCode = "INVALID_RANGE",
         };
+
     }
 }

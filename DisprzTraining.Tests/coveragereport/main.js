@@ -221,11 +221,11 @@ var assemblies = [
   {
     "name": "DisprzTraining",
     "classes": [
-      { "name": "DisprzTraining.Business.AppointmentsBL", "rp": "DisprzTraining_AppointmentsBL.html", "cl": 101, "ucl": 0, "cal": 101, "tl": 160, "ct": "LineCoverage", "cbm": "-", "cb": 34, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
-      { "name": "DisprzTraining.Controllers.AppointmentsController", "rp": "DisprzTraining_AppointmentsController.html", "cl": 49, "ucl": 0, "cal": 49, "tl": 120, "ct": "LineCoverage", "cbm": "-", "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
+      { "name": "DisprzTraining.Business.AppointmentsBL", "rp": "DisprzTraining_AppointmentsBL.html", "cl": 101, "ucl": 0, "cal": 101, "tl": 159, "ct": "LineCoverage", "cbm": "-", "cb": 34, "tb": 34, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
+      { "name": "DisprzTraining.Controllers.AppointmentsController", "rp": "DisprzTraining_AppointmentsController.html", "cl": 49, "ucl": 0, "cal": 49, "tl": 121, "ct": "LineCoverage", "cbm": "-", "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
       { "name": "DisprzTraining.CustomErrorCodes.CustomErrorCodeMessages", "rp": "DisprzTraining_CustomErrorCodeMessages.html", "cl": 50, "ucl": 0, "cal": 50, "tl": 59, "ct": "LineCoverage", "cbm": "-", "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
       { "name": "DisprzTraining.Data.DataStore", "rp": "DisprzTraining_DataStore.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 10, "ct": "LineCoverage", "cbm": "-", "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
-      { "name": "DisprzTraining.DataAccess.AppointmentsDAL", "rp": "DisprzTraining_AppointmentsDAL.html", "cl": 144, "ucl": 0, "cal": 144, "tl": 213, "ct": "LineCoverage", "cbm": "-", "cb": 44, "tb": 44, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
+      { "name": "DisprzTraining.DataAccess.AppointmentsDAL", "rp": "DisprzTraining_AppointmentsDAL.html", "cl": 144, "ucl": 0, "cal": 144, "tl": 197, "ct": "LineCoverage", "cbm": "-", "cb": 44, "tb": 44, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
       { "name": "DisprzTraining.Models.Appointment", "rp": "DisprzTraining_Appointment.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 10, "ct": "LineCoverage", "cbm": "-", "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
       { "name": "DisprzTraining.Models.AppointmentsBase", "rp": "DisprzTraining_AppointmentsBase.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 21, "ct": "LineCoverage", "cbm": "-", "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },
       { "name": "DisprzTraining.Models.Attachment", "rp": "DisprzTraining_Attachment.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 9, "ct": "LineCoverage", "cbm": "-", "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [] },

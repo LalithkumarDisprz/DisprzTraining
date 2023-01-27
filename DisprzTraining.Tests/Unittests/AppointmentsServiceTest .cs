@@ -93,7 +93,6 @@ namespace DisprzTraining.Tests
 
             Assert.IsType<List<Appointment>>(resultData);
 
-
             var removeResult = _appointment.Remove(testId, resultData[0].Date) as NoContentResult;
             _appointment.Remove(resultData[0].Id, resultData[0].Date);
             _appointment.Remove(resultData[0].Id, resultData[0].Date);
@@ -370,8 +369,8 @@ namespace DisprzTraining.Tests
             var value_2 = JsonConvert.DeserializeObject<CustomCodes>((string)result_2.Value);
 
             //Assert
-            Assert.Equal("Unable to add Event in current event-duration", value.message);
-            Assert.Equal("Invalid Content as Attachment", value_2.message);
+            Assert.Equal("Unable to add Event in current event-duration", value?.message);
+            Assert.Equal("Invalid Content as Attachment", value_2?.message);
             Assert.Equal(400, result?.StatusCode);
             Assert.Equal(400, result_2.StatusCode);
             Assert.Equal(400, result_3?.StatusCode);
@@ -525,7 +524,7 @@ namespace DisprzTraining.Tests
             };
             DateTime startRange = new DateTime(2024, 01, 26);
             DateTime endRange = startRange.AddDays(7);
-            DateTime endRange_2=startRange.AddDays(-1);
+            DateTime endRange_2 = startRange.AddDays(-1);
             //Act
             _appointment.CreateAppointment(data_1);
             _appointment.CreateAppointment(data_2);
@@ -536,10 +535,10 @@ namespace DisprzTraining.Tests
             _appointment.CreateAppointment(data_7);
             _appointment.CreateAppointment(data_8);
 
-            var getResult = _appointment.GetListByRange(startRange,endRange);
-            var getResult_2 = _appointment.GetListByRange(startRange,endRange_2);
+            var getResult = _appointment.GetListByRange(startRange, endRange);
+            var getResult_2 = _appointment.GetListByRange(startRange, endRange_2);
             var value = getResult.Result as OkObjectResult;
-            var value_2=getResult_2.Result as BadRequestObjectResult;
+            var value_2 = getResult_2.Result as BadRequestObjectResult;
             var getData = GetTestData(getResult);
             var getResultData_7 = _appointment.GetAppointmentsByDate(data_7.Date);
             var getResultData_8 = _appointment.GetAppointmentsByDate(data_8.Date);
@@ -551,7 +550,7 @@ namespace DisprzTraining.Tests
             Assert.Equal(6, getData.Count); //---out of range element not added;
             Assert.InRange(getData[0].EndTime, startRange, endRange);
             Assert.InRange(getData[5].EndTime, startRange, endRange);
-            Assert.Equal(400,value_2.StatusCode);
+            Assert.Equal(400, value_2.StatusCode);
 
             var remove_1 = _appointment.Remove(getData[5].Id, getData[5].Date);
             var remove_2 = _appointment.Remove(getData[4].Id, getData[4].Date);
@@ -927,7 +926,7 @@ namespace DisprzTraining.Tests
             var result_4 = Assert.IsType<ConflictObjectResult>(updateEvent_5);
             var result_5 = Assert.IsType<ConflictObjectResult>(updateEvent_6);
             var result_6 = Assert.IsType<ConflictObjectResult>(updateEvent_7);
-            var value = JsonConvert.DeserializeObject<CustomCodes>((string)result?.Value);
+            var value = JsonConvert.DeserializeObject<CustomCodes>((string)result.Value);
             Assert.Equal(409, result_6.StatusCode);
             Assert.Equal(409, result.StatusCode);
             Assert.Equal(409, result_2.StatusCode);
@@ -1122,8 +1121,8 @@ namespace DisprzTraining.Tests
             Assert.Equal(400, updatedResult.StatusCode);
             Assert.Equal(400, updatedResult_2.StatusCode);
             Assert.Equal(400, updatedResult_3.StatusCode);
-            Assert.Equal("Cannot Add Event As StartTime And End Time Are Same", value.message);
-            Assert.Equal("Invalid Content as Attachment", value_2.message);
+            Assert.Equal("Cannot Add Event As StartTime And End Time Are Same", value?.message);
+            Assert.Equal("Invalid Content as Attachment", value_2?.message);
             var removeResult = _appointment.Remove(getId, getData[0].Date);
 
         }

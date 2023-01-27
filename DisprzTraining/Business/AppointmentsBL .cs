@@ -19,7 +19,6 @@ namespace DisprzTraining.Business
         public bool CreateNewAppointment(AddNewAppointment data)
         {
             bool base64Format = CheckBase64(data.AppointmentAttachment);
-
             if (base64Format)
             {
                 CheckInputTime(data);
@@ -46,6 +45,7 @@ namespace DisprzTraining.Business
             {
                 throw new Exception(JsonConvert.SerializeObject(CustomErrorCodeMessages.invalidRange));
             }
+            else
             return _appointmentsDAL.GetRangedList(startRange,endRange);
         }
 
@@ -89,7 +89,6 @@ namespace DisprzTraining.Business
                         if (updatedAppointment)
                         {
                             return _appointmentsDAL.RemoveAppointmentById(data.Appointment.Id, OldDate);
-
                         }
                         else
                         {
