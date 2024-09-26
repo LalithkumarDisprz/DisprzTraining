@@ -1,1 +1,6 @@
 .vs
+DisprzTraining.Tests/bin/
+DisprzTraining.Tests/obj/
+DisprzTraining/bin/
+DisprzTraining/obj/
+.vscode

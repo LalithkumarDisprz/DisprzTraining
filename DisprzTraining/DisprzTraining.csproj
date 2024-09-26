@@ -14,9 +14,14 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <InternalsVisibleToAttributes Include="..\DisprzTraing.Tests" />
   </ItemGroup>
+  <!-- <ItemGroup>
+  <ProjectReference Include="..\DisprzTraining.Tests\DisprzTraining.csproj" />
+  </ItemGroup> -->
+  
+ 
 
 </Project>
